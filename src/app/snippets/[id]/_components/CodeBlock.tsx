@@ -1,5 +1,4 @@
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { Highlight, themes } from "prism-react-renderer";
 import CopyButton from "./CopyButton";
 
 const CodeBlock = ({ language, code }: { language: string; code: string }) => {
@@ -23,19 +22,37 @@ const CodeBlock = ({ language, code }: { language: string; code: string }) => {
 
       {/* code block with syntax highlighting */}
       <div className="relative">
-        <SyntaxHighlighter
+        <Highlight
+          theme={themes.oneDark}
+          code={trimmedCode}
           language={language || "plaintext"}
-          style={atomOneDark} // dark theme for the code
-          customStyle={{
-            padding: "1rem",
-            background: "transparent",
-            margin: 0,
-          }}
-          showLineNumbers={true}
-          wrapLines={true} // wrap long lines
         >
-          {trimmedCode}
-        </SyntaxHighlighter>
+          {({ className, style, tokens, getLineProps, getTokenProps }) => (
+            <pre
+              className={className}
+              style={{
+                ...style,
+                padding: "1rem",
+                background: "transparent",
+                margin: 0,
+                overflow: "auto",
+              }}
+            >
+              {tokens.map((line, i) => (
+                <div key={i} {...getLineProps({ line })} style={{ display: "flex" }}>
+                  <span style={{ userSelect: "none", marginRight: "1em", opacity: 0.5 }}>
+                    {i + 1}
+                  </span>
+                  <span>
+                    {line.map((token, key) => (
+                      <span key={key} {...getTokenProps({ token })} />
+                    ))}
+                  </span>
+                </div>
+              ))}
+            </pre>
+          )}
+        </Highlight>
       </div>
     </div>
   );

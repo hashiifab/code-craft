@@ -1,6 +1,5 @@
 # 🚀 CodeCraft – Next.js 15 SaaS Code Editor
 
-![Demo App](/public/screenshot-for-readme.png)
 
 A modern fullstack code editor built with Next.js 15, designed for collaborative editing, real-time updates, and seamless user experience. Perfect for developers who want to build, share, and explore code snippets online.
 

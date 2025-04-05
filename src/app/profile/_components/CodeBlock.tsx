@@ -1,8 +1,7 @@
 "use client";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { Highlight, themes } from "prism-react-renderer";
 
 interface CodeBlockProps {
   code: string;
@@ -16,18 +15,33 @@ const CodeBlock = ({ code, language }: CodeBlockProps) => {
 
   return (
     <div className="relative">
-      <SyntaxHighlighter
+      <Highlight
+        theme={themes.oneDark}
+        code={displayCode}
         language={language.toLowerCase() === 'cs' ? 'csharp' : language.toLowerCase()}
-        style={atomOneDark}
-        customStyle={{
-          padding: "1rem",
-          borderRadius: "0.5rem",
-          background: "rgba(0, 0, 0, 0.4)",
-          margin: 0,
-        }}
       >
-        {displayCode}
-      </SyntaxHighlighter>
+        {({ className, style, tokens, getLineProps, getTokenProps }) => (
+          <pre
+            className={className}
+            style={{
+              ...style,
+              padding: "1rem",
+              borderRadius: "0.5rem",
+              background: "rgba(0, 0, 0, 0.4)",
+              margin: 0,
+              overflow: "auto",
+            }}
+          >
+            {tokens.map((line, i) => (
+              <div key={i} {...getLineProps({ line })}>
+                {line.map((token, key) => (
+                  <span key={key} {...getTokenProps({ token })} />
+                ))}
+              </div>
+            ))}
+          </pre>
+        )}
+      </Highlight>
 
       {lines.length > 6 && (
         <button
